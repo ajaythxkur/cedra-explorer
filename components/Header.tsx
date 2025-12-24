@@ -1,14 +1,26 @@
 import Link from "next/link"
+import { Button } from "./ui/button"
 export function Header() {
+    const navItems = [
+        { title: "Home", url: "/" },
+        { title: "Transactions", url: "/transactionss" },
+        { title: "Blocks", url: "/blocks" },
+    ]
     return (
-        <header className="flex justify-between p-4">
-            <h1 className="font-bold text-2xl">EXPLORER</h1>
-            <div className="flex gap-4 font-medium">
-                <Link href={"/"}>Home</Link>
-                <Link href={"/"}>Transactions</Link>
-                <Link href={"/"}>Blocks</Link>
+        <header className="p-4 border-b">
+            <div className="flex items-center justify-between">
+                <h1 className="font-bold text-2xl">EXPLORER</h1>
+                <nav className="flex items-center gap-6">
+                    {
+                        navItems.map((item, i) => {
+                            return (
+                                <Link href={`${item.url}`}>{item.title}</Link>
+                            )
+                        })
+                    }
+                </nav>
+                <Button variant="outline">Connect Wallet</Button>
             </div>
-            <button className="bg-white text-black p-2 font-medium cursor-pointer rounded-xl">Connect Wallet</button>
         </header>
     )
 }
