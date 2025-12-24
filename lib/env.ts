@@ -1,0 +1,1 @@
+export const NETWORK = process.env.NETWORK as string;
