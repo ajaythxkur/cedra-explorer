@@ -1,10 +1,15 @@
 "use client"
-
-import { Input } from "@/components/ui/input";
+import { H2, P14 } from "@/components/typography";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getCedraClient } from "@/lib/cedraClient"
+import { shortAddress } from "@/lib/utils";
 import { TransactionResponse } from "@cedra-labs/ts-sdk";
+import { SearchIcon } from "lucide-react";
 import { useState, useEffect } from "react"
+import { IoSwapHorizontal } from "react-icons/io5";
+import { LuBox } from "react-icons/lu";
+import Stats from "./Stats";
 
 export function Home() {
     const cedraClient = getCedraClient();
@@ -25,84 +30,109 @@ export function Home() {
         })()
     }, [])
     return (
-        <section className="py-10 px-6">
-            <div className="max-w-xl mx-auto">
-                <Input
-                    type="text"
-                    placeholder="Search by Address, transaction"
-                />
-            </div>
-            <div className="max-w-7xl mx-auto grid grid-cols-4 gap-6 mt-10">
-                <div className="p-10 rounded-2xl border"></div>
-                <div className="p-10 rounded-2xl border"></div>
-                <div className="p-10 rounded-2xl border"></div>
-                <div className="p-10 rounded-2xl border"></div>
-            </div>
-            <div className="mt-10 grid grid-cols-2 gap-6">
-                <div className="rounded-xl border p-2">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-10">Txn.</TableHead>
-                                <TableHead>Type</TableHead>
-                                <TableHead>From</TableHead>
-                                <TableHead>To</TableHead>
-                                <TableHead className="text-right">Amount</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell className="font-medium">---</TableCell>
-                                <TableCell>--</TableCell>
-                                <TableCell>---</TableCell>
-                                <TableCell>---</TableCell>
-                                <TableCell className="text-right">---</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
+        <>
+            <div className="min-h-screen w-full relative bg-black pt-30">
+                <div className="absolute inset-0 z-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6, 182, 212, 0.25), transparent 70%), #000000", }} />
+                {/* Search */}
+                <div className="max-w-xl mx-auto">
+                    <h1 className="text-4xl font-bold text-white text-center relative z-10">Cedra Explorer</h1>
+                    <InputGroup className="border border-white/20 p-5 mt-6 rounded-full">
+                        <InputGroupInput placeholder="Search by address / transaction" className="text-lg ps-0" />
+                        <InputGroupAddon className="px-0">
+                            <SearchIcon />
+                        </InputGroupAddon>
+                    </InputGroup>
                 </div>
-                <div className="rounded-xl border">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-10">Txn.</TableHead>
-                                <TableHead>Type</TableHead>
-                                <TableHead>From</TableHead>
-                                <TableHead>To</TableHead>
-                                <TableHead className="text-right">Amount</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell className="font-medium">---</TableCell>
-                                <TableCell>--</TableCell>
-                                <TableCell>---</TableCell>
-                                <TableCell>---</TableCell>
-                                <TableCell className="text-right">---</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
-        </section>
 
-        // <div>
-        //     <div className="flex justify-center">
-        //         <p>Version</p>
-        //         <p>From</p>
-        //         <p>To</p>
-        //         <p>Amount</p>
-        //     </div>
-        //     {
-        //         latestTransactions && latestTransactions.map(txn => (
-        //             <div className="flex justify-center" key={txn.hash}>
-        //                 <p>{txn.hash}</p>
-        //                 <p>From</p>
-        //                 <p>To</p>
-        //                 <p>Amount</p>
-        //             </div>
-        //         ))
-        //     }
-        // </div>
+                {/* Stats */}
+                <Stats />
+
+                <div className="py-10 grid grid-cols-2 gap-6 px-4 relative z-10 max-w-7xl mx-auto">
+                    {/* Transactions */}
+                    <div className="rounded-2xl p-2 bg-[#111111] overflow-hidden">
+                        <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-xl border-b-3 border-[#005664]">
+                            <H2>Latest Transactions</H2>
+                        </div>
+                        <Table className="overflow-hidden mt-4">
+                            <TableBody>
+                                {
+                                    Array.from({ length: 10 }).map(() => {
+                                        return (
+                                            <TableRow className="px-4 border-white/10 text-white/50">
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="rounded-full bg-white/20 p-2">
+                                                            <IoSwapHorizontal size={20} />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <P14>{shortAddress('iourwdsfw3423')}</P14>
+                                                            <P14>2 secs ago</P14>
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="space-y-3">
+                                                        <P14>From: <span className="border border-white/5 rounded-sm px-2">{shortAddress('iourwdsfw3423')}</span></P14>
+                                                        <P14>To: <span className="border border-white/5 rounded-sm px-2">{shortAddress('iourwdsfw3423')}</span></P14>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="space-y-2">
+                                                        <P14 className="font-medium">Amount</P14>
+                                                        <P14 className="font-medium text-white">40 CED</P14>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+                    </div>
+
+                    {/* Blocks */}
+                    <div className="rounded-2xl p-2 bg-[#111111] overflow-hidden">
+                        <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-xl border-b-3 border-[#005664]">
+                            <H2>Latest Blocks</H2>
+                        </div>
+                        <Table className="overflow-hidden mt-4">
+                            <TableBody>
+                                {
+                                    Array.from({ length: 10 }).map(() => {
+                                        return (
+                                            <TableRow className="px-4 border-white/10 text-white/50">
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="rounded-full bg-white/20 p-2">
+                                                            <LuBox size={20} />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <P14>#44380896</P14>
+                                                            <P14>2 secs ago</P14>
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="space-y-3">
+                                                        <P14>Proposed by: Allnodes</P14>
+                                                        <P14>10 txns</P14>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="space-y-2">
+                                                        <P14 className="font-medium">Rewards</P14>
+                                                        <P14 className="font-medium text-white">40 CED</P14>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }

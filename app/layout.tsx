@@ -18,7 +18,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${satoshi.className} antialiased`}>
         <Header />
-        <main className="h-[calc(100vh-116px)] overflow-hidden">
+        {/* <main className="h-[calc(100vh-116px)] overflow-y-auto"> */}
+        <main className="">
           {children}
         </main>
         <Footer/>
