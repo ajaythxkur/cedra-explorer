@@ -1,7 +1,8 @@
 import Body from "./components";
 
-export default function Transactions(){
-    return(
+export default function Blocks() {
+    return (
         <Body/>
+        
     )
 }

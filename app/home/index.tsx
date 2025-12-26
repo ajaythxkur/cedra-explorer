@@ -10,6 +10,8 @@ import { useState, useEffect } from "react"
 import { IoSwapHorizontal } from "react-icons/io5";
 import { LuBox } from "react-icons/lu";
 import Stats from "./Stats";
+import { Search } from "@/components/Search";
+import Link from "next/link";
 
 export function Home() {
     const cedraClient = getCedraClient();
@@ -31,18 +33,11 @@ export function Home() {
     }, [])
     return (
         <>
-            <div className="min-h-screen w-full relative bg-black pt-30">
-                <div className="absolute inset-0 z-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6, 182, 212, 0.25), transparent 70%), #000000", }} />
+            {/* <div className="min-h-screen w-full relative bg-black pt-30"> */}
+            <div className="min-h-screen w-full relative pt-30">
+                {/* <div className="absolute inset-0 z-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6, 182, 212, 0.25), transparent 70%), #000000", }} /> */}
                 {/* Search */}
-                <div className="max-w-xl mx-auto">
-                    <h1 className="text-4xl font-bold text-white text-center relative z-10">Cedra Explorer</h1>
-                    <InputGroup className="border border-white/20 p-5 mt-6 rounded-full">
-                        <InputGroupInput placeholder="Search by address / transaction" className="text-lg ps-0" />
-                        <InputGroupAddon className="px-0">
-                            <SearchIcon />
-                        </InputGroupAddon>
-                    </InputGroup>
-                </div>
+                <Search />
 
                 {/* Stats */}
                 <Stats />
@@ -56,16 +51,16 @@ export function Home() {
                         <Table className="overflow-hidden mt-4">
                             <TableBody>
                                 {
-                                    Array.from({ length: 10 }).map(() => {
+                                    Array.from({ length: 10 }).map((_,i) => {
                                         return (
-                                            <TableRow className="px-4 border-white/10 text-white/50">
+                                            <TableRow key={i} className="px-4 border-white/10 text-white/50">
                                                 <TableCell>
                                                     <div className="flex items-center gap-2">
                                                         <div className="rounded-full bg-white/20 p-2">
                                                             <IoSwapHorizontal size={20} />
                                                         </div>
                                                         <div className="space-y-2">
-                                                            <P14>{shortAddress('iourwdsfw3423')}</P14>
+                                                            <Link href={`/tx/${i}`}><P14>{shortAddress('iourwdsfw3423')}</P14></Link>
                                                             <P14>2 secs ago</P14>
                                                         </div>
                                                     </div>

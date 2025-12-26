@@ -16,13 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${satoshi.className} antialiased`}>
+      <body className={`${satoshi.className} antialiased`} style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6, 182, 212, 0.25), transparent 70%), #000000", }} >
         <Header />
         {/* <main className="h-[calc(100vh-116px)] overflow-y-auto"> */}
         <main className="">
           {children}
         </main>
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );
