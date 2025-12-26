@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Body({ txid }: { txid: string }) {
     return (
-        <div className="min-h-screen w-full relative pt-30 pb-10">
+        <div className="min-h-screen w-full relative py-10">
             {/* Search */}
             <Search />
             <div className="max-w-7xl mx-auto mt-6">

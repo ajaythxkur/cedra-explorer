@@ -9,7 +9,7 @@ import { LuBox } from "react-icons/lu"
 
 export default function Body() {
     return (
-        <div className="min-h-screen w-full relative pt-30 pb-10">
+        <div className="min-h-screen w-full relative py-10">
             {/* Search */}
             <Search />
             <div className="max-w-7xl mx-auto mt-6">

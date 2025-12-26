@@ -34,7 +34,7 @@ export function Home() {
     return (
         <>
             {/* <div className="min-h-screen w-full relative bg-black pt-30"> */}
-            <div className="min-h-screen w-full relative pt-30">
+            <div className="min-h-screen w-full relative pt-10">
                 {/* <div className="absolute inset-0 z-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6, 182, 212, 0.25), transparent 70%), #000000", }} /> */}
                 {/* Search */}
                 <Search />
