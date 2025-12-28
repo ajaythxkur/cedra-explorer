@@ -72,17 +72,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${satoshi.className} antialiased`} style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6, 182, 212, 0.25), transparent 70%), #000000", }} >
+          <Suspense>
         <ReactQueryClientProvider>
-          <AppProvider>
-            <Suspense>
+            <AppProvider>
               <Header />
               <main>
                 {children}
               </main>
               <Footer />
-            </Suspense>
-          </AppProvider>
+            </AppProvider>
         </ReactQueryClientProvider>
+          </Suspense>
       </body>
     </html>
   );
