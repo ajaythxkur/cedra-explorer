@@ -1,10 +1,8 @@
 "use client"
 import { H2, P14 } from "@/components/typography";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody,  TableCell, TableRow } from "@/components/ui/table";
 import { shortAddress } from "@/lib/utils";
 import { Block, TransactionResponse, TransactionResponseType } from "@cedra-labs/ts-sdk";
-import { SearchIcon } from "lucide-react";
 import { useState, useEffect, useCallback } from "react"
 import { IoSwapHorizontal } from "react-icons/io5";
 import { LuBox } from "react-icons/lu";
@@ -14,14 +12,23 @@ import Link from "next/link";
 import { cedraClient } from "@/lib/cedraClient";
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import TransactionLoading from "@/components/skeletons/homeSkeletons";
+import BlocksLoading from "@/components/skeletons/homeSkeletons";
+import { RxDoubleArrowRight } from "react-icons/rx";
 dayjs.extend(relativeTime);
 
 export function Home() {
+    const router = useRouter()
     const [latestTransactions, setLatestTransactions] = useState<TransactionResponse[]>();
     const [latestBlocks, setLatestBlocks] = useState<Block[]>();
+    const [blocksLoading, setBlocksLoading] = useState(false)
+    const [txLoading, setTxLoading] = useState(false)
 
     const getLatestBlocks = useCallback(async () => {
         try {
+            setBlocksLoading(true)
             const ledgerData = await cedraClient.getLedgerInfo();
             const endBlock = parseInt(ledgerData.block_height);
             const startBlock = endBlock - 4;
@@ -33,11 +40,14 @@ export function Home() {
             setLatestBlocks(data.reverse());
         } catch (error) {
             console.log(`Error in getLatestBlocks: ${error}`)
+        } finally {
+            setBlocksLoading(false)
         }
     }, [])
 
     const getLatestTransactions = useCallback(async () => {
         try {
+            setTxLoading(true)
             const data = await cedraClient.getTransactions({
                 options: {
                     limit: 5
@@ -46,12 +56,26 @@ export function Home() {
             setLatestTransactions(data);
         } catch (error) {
             console.log(`Error in getLatestTransactions: ${error}`)
+        } finally {
+            setTxLoading(false)
         }
     }, [])
+    // useEffect(() => {
+    //     getLatestBlocks()
+    //     getLatestTransactions()
+    // }, [getLatestBlocks, getLatestTransactions])
     useEffect(() => {
-        getLatestBlocks()
-        getLatestTransactions()
-    }, [getLatestBlocks, getLatestTransactions])
+        const fetchData = async () => {
+            await Promise.all([
+                getLatestBlocks(),
+                getLatestTransactions(),
+            ]);
+        };
+
+        fetchData();
+    }, [getLatestBlocks, getLatestTransactions]);
+
+
     console.log(latestBlocks)
     return (
         <>
@@ -73,89 +97,127 @@ export function Home() {
                                     <H2>Latest Transactions</H2>
                                 </div>
                                 <Table className="overflow-hidden mt-4">
-                                    <TableBody>
-                                        {
-                                            latestTransactions.map(txn => {
-                                                return (
-                                                    <TableRow key={txn.hash} className="px-4 border-white/10 text-white/50">
-                                                        <TableCell>
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="rounded-full bg-white/20 p-2">
-                                                                    <IoSwapHorizontal size={20} />
-                                                                </div>
-                                                                <div className="space-y-2">
-                                                                    <Link href={`/tx/${txn.hash}`}><P14>{shortAddress(txn.hash)}</P14></Link>
-                                                                    <P14><TxnTime txn={txn} /></P14>
-                                                                </div>
-                                                            </div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <TxnPath txn={txn}/>
-                                                        </TableCell>    
-                                                        <TableCell className="text-right">
-                                                            <div className="space-y-2">
-                                                                <P14 className="font-medium">Amount</P14>
-                                                                <P14 className="font-medium text-white"><TxnAmount txn={txn}/></P14>
-                                                            </div>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )
-                                            })
-                                        }
-                                    </TableBody>
-                                </Table>
-
-                            </div>
-                        )
-                    }
-
-
-                    {/* Blocks */}
-                    {
-                        latestBlocks && (
-                            <div className="rounded-2xl p-2 bg-[#111111] overflow-hidden">
-                                <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-xl border-b-3 border-[#005664]">
-                                    <H2>Latest Blocks</H2>
-                                </div>
-                                <Table className="overflow-hidden mt-4">
-                                    <TableBody>
-                                        {
-                                            latestBlocks.map(block => {
-                                                return (
-                                                    <TableRow key={block.block_height} className="px-4 border-white/10 text-white/50">
-                                                        <TableCell>
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="rounded-full bg-white/20 p-2">
-                                                                    <LuBox size={20} />
-                                                                </div>
-                                                                <div className="space-y-2">
-                                                                    <P14>#{block.block_height}</P14>
-                                                                    <P14>{dayjs.unix(Math.floor(Number(block.block_timestamp) / 1_000_000)).fromNow()}</P14>
-                                                                </div>
-                                                            </div>
-                                                        </TableCell>
+                                    {
+                                        txLoading ?
+                                            <TransactionLoading />
+                                            :
+                                            latestTransactions
+                                                ?
+                                                <TableBody>
+                                                    {
+                                                        latestTransactions.map(txn => {
+                                                            return (
+                                                                <TableRow
+                                                                    key={txn.hash}
+                                                                    className="px-4 border-white/10 text-white/50"
+                                                                    onClick={() => router.push(`/tx/${txn.hash}`)}
+                                                                >
+                                                                    <TableCell>
+                                                                        <div className="flex items-center gap-2">
+                                                                            <div className="rounded-full bg-white/20 p-2">
+                                                                                <IoSwapHorizontal size={20} />
+                                                                            </div>
+                                                                            <div className="space-y-2">
+                                                                                <Link href={`/tx/${txn.hash}`}><P14>{shortAddress(txn.hash)}</P14></Link>
+                                                                                <P14><TxnTime txn={txn} /></P14>
+                                                                            </div>
+                                                                        </div>
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        <TxnPath txn={txn} />
+                                                                    </TableCell>
+                                                                    <TableCell className="text-right">
+                                                                        <div className="space-y-2">
+                                                                            <P14 className="font-medium">Amount</P14>
+                                                                            <P14 className="font-medium text-white"><TxnAmount txn={txn} /></P14>
+                                                                        </div>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            )
+                                                        })
+                                                    }
+                                                </TableBody>
+                                                :
+                                                <TableBody>
+                                                    <TableRow className="px-4 border-white/10 text-white/50">
                                                         <TableCell>
                                                             <div className="space-y-3">
-                                                                <P14>Total Txns</P14>
-                                                                <P14>{parseInt(block.last_version) - parseInt(block.first_version) + 1}</P14>
-                                                            </div>
-                                                        </TableCell>
-                                                        <TableCell className="text-right">
-                                                            <div className="space-y-2">
-                                                                <P14 className="font-medium">Block Hash</P14>
-                                                                <P14 className="font-medium text-white">{shortAddress(block.block_hash)}</P14>
+                                                                <P14>No Transactions</P14>
                                                             </div>
                                                         </TableCell>
                                                     </TableRow>
-                                                )
-                                            })
-                                        }
-                                    </TableBody>
+                                                </TableBody>
+
+                                    }
+
                                 </Table>
+                                <div className="w-full text-center py-4 pb-2">
+                                    <Link href="/transactions"><Button className="mx-auto">View More <RxDoubleArrowRight size={16}/>
+</Button></Link>
+                                </div>
                             </div>
                         )
                     }
 
+                    {/* Blocks */}
+                    <div className="rounded-2xl p-2 bg-[#111111] overflow-hidden">
+                        <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-xl border-b-3 border-[#005664]">
+                            <H2>Latest Blocks</H2>
+                        </div>
+                        <Table className="overflow-hidden mt-4">
+                            {
+                                blocksLoading ?
+                                    <BlocksLoading />
+                                    :
+                                    latestBlocks ?
+                                        <TableBody>
+                                            {
+                                                latestBlocks.map(block => {
+                                                    return (
+                                                        <TableRow key={block.block_height} className="px-4 border-white/10 text-white/50">
+                                                            <TableCell>
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="rounded-full bg-white/20 p-2">
+                                                                        <LuBox size={20} />
+                                                                    </div>
+                                                                    <div className="space-y-2">
+                                                                        <P14>#{block.block_height}</P14>
+                                                                        <P14>{dayjs.unix(Math.floor(Number(block.block_timestamp) / 1_000_000)).fromNow()}</P14>
+                                                                    </div>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <div className="space-y-3">
+                                                                    <P14>{parseInt(block.last_version) - parseInt(block.first_version) + 1} Txns.</P14>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell className="text-right">
+                                                                <div className="space-y-2">
+                                                                    <P14 className="font-medium">Block Hash</P14>
+                                                                    <P14 className="font-medium text-white">{shortAddress(block.block_hash)}</P14>
+                                                                </div>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                })
+                                            }
+                                        </TableBody>
+                                        :
+                                        <TableBody>
+                                            <TableRow className="px-4 border-white/10 text-white/50">
+                                                <TableCell>
+                                                    <div className="space-y-3">
+                                                        <P14>No Blocks Yet</P14>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                            }
+                        </Table>
+                        <div className="w-full text-center py-4 pb-2">
+                            <Link href="/blocks"><Button className="mx-auto">View More <RxDoubleArrowRight size={16}/></Button></Link>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
@@ -189,7 +251,7 @@ function TxnAmount({ txn }: { txn: TransactionResponse }) {
         const netGasWithoutRefund = BigInt(gasUnitPrice) * grossGasUnits;
 
         return (
-           `${(Number(netGasWithoutRefund) / Math.pow(10, 8))}`
+            `${(Number(netGasWithoutRefund) / Math.pow(10, 8))}`
         )
     } else {
         return "-"

@@ -99,7 +99,7 @@ export default function Stats() {
     },[getTps])
     return (
         <>
-            <div className="relative z-10 grid grid-cols-3 items-center justify-between max-w-4xl mx-auto mt-10 gap-6">
+            <div className="relative z-10 grid grid-cols-4 items-center justify-between max-w-6xl mx-auto mt-10 gap-6">
                 <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-white/10 hover:bg-white/8 transition-all duration-300">
                     <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-b-xl border-b-3 border-[#005664]">
                         <P16 className="font-medium">Total Transactions</P16>

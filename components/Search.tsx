@@ -10,7 +10,7 @@ export function Search() {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setDebSearch(search)
-        }, 1000)
+        }, 500)
         return () => clearTimeout(timeout)
     }, [search])
     return (
