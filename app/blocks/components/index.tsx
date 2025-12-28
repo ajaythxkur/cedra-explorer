@@ -1,3 +1,4 @@
+'use client'
 import { Search } from "@/components/Search"
 import { H2, P14 } from "@/components/typography"
 import { Button } from "@/components/ui/button"
@@ -29,9 +30,9 @@ export default function Body() {
                         </TableHeader>
                         <TableBody>
                             {
-                                Array.from({ length: 10 }).map(() => {
+                                Array.from({ length: 10 }).map((_,i) => {
                                     return (
-                                        <TableRow className="px-4 border-white/10 text-white/80">
+                                        <TableRow key={i} className="px-4 border-white/10 text-white/80">
                                             <TableCell>
                                                 <div className="flex items-center gap-2">
                                                     <div className="rounded-full bg-white/20 p-2">

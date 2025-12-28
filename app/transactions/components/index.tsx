@@ -1,3 +1,4 @@
+'use client'
 import { Search } from "@/components/Search"
 import { H2, P14 } from "@/components/typography"
 import { Button } from "@/components/ui/button"
@@ -5,7 +6,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { shortAddress } from "@/lib/utils"
 import Link from "next/link"
 import { IoSwapHorizontal } from "react-icons/io5"
-import { LuBox } from "react-icons/lu"
 
 export default function Body() {
     return (

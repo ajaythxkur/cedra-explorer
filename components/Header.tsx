@@ -26,7 +26,7 @@ export function Header() {
                     {
                         navItems.map((item, i) => {
                             return (
-                                <Link href={`${item.url}`}>{item.title}</Link>
+                                <Link key={i} href={`${item.url}`}>{item.title}</Link>
                             )
                         })
                     }

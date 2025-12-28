@@ -1,3 +1,4 @@
+'use client'
 import CopyAddress from "@/components/CopyAddress";
 import { Search } from "@/components/Search";
 import { P14 } from "@/components/typography";

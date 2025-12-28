@@ -1,3 +1,4 @@
+'use client'
 import { H2, P14, P16 } from "@/components/typography";
 
 export default function Stats() {

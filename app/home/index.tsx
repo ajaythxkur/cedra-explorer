@@ -35,7 +35,6 @@ export function Home() {
         <>
             {/* <div className="min-h-screen w-full relative bg-black pt-30"> */}
             <div className="min-h-screen w-full relative pt-10">
-                {/* <div className="absolute inset-0 z-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6, 182, 212, 0.25), transparent 70%), #000000", }} /> */}
                 {/* Search */}
                 <Search />
 
@@ -93,9 +92,9 @@ export function Home() {
                         <Table className="overflow-hidden mt-4">
                             <TableBody>
                                 {
-                                    Array.from({ length: 10 }).map(() => {
+                                    Array.from({ length: 10 }).map((_,i) => {
                                         return (
-                                            <TableRow className="px-4 border-white/10 text-white/50">
+                                            <TableRow key={i} className="px-4 border-white/10 text-white/50">
                                                 <TableCell>
                                                     <div className="flex items-center gap-2">
                                                         <div className="rounded-full bg-white/20 p-2">

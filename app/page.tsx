@@ -1,6 +1,5 @@
-"use client"
 import { Home } from "@/app/home";
-export default async function Page() {
+export default function Page() {
   
   // client.getIndexerLastSuccessVersion()
   // client.getTransactions
