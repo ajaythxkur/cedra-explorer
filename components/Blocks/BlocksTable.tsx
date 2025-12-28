@@ -6,15 +6,18 @@ import { shortAddress } from "@/lib/utils";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { P14 } from "../typography";
+import Link from "next/link";
+import { useState } from "react";
 dayjs.extend(relativeTime);
 
 type BlockCellProps = {
     block: Block
 }
 function BlockHash({ block }: BlockCellProps) {
+    const [isFullAddress, setIsFullAddress] = useState(false)
     return (
-        <TableCell>
-            {shortAddress(block.block_hash)}
+        <TableCell onClick={() => setIsFullAddress(!isFullAddress)}>
+            {isFullAddress ? block.block_hash : shortAddress(block.block_hash)}
         </TableCell>
     )
 }
@@ -22,7 +25,7 @@ function BlockHash({ block }: BlockCellProps) {
 function BlockHeight({ block }: BlockCellProps) {
     return (
         <TableCell>
-            {block.block_height}
+            <Link href={"/block/" + block.block_height}>{block.block_height}</Link>
         </TableCell>
     )
 }
@@ -38,7 +41,7 @@ function BlockTimestamp({ block }: BlockCellProps) {
 function FirstVersion({ block }: BlockCellProps) {
     return (
         <TableCell>
-            {block.first_version}
+            <Link href={"/txn/" + block.first_version}>{block.first_version}</Link>
         </TableCell>
     )
 }
@@ -46,7 +49,7 @@ function FirstVersion({ block }: BlockCellProps) {
 function LastVersion({ block }: BlockCellProps) {
     return (
         <TableCell>
-            {block.last_version}
+            <Link href={"/txn/" + block.last_version}>{block.last_version}</Link>
         </TableCell>
     )
 }
@@ -70,12 +73,12 @@ const BlockCells = Object.freeze({
 export type BlocksColumn = keyof typeof BlockCells;
 
 const DEFAULT_COLUMNS: BlocksColumn[] = [
-    "block_hash",
     "block_height",
     "block_timestamp",
+    "block_hash",
+    "txn_count",
     "first_version",
     "last_version",
-    "txn_count"
 ]
 
 type BlockRowProps = {
