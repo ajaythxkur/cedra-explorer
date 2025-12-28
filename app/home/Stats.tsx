@@ -1,9 +1,8 @@
 'use client'
 import { H2, P14, P16 } from "@/components/typography";
-import { cedraClient } from "@/lib/cedraClient";
 import { LedgerInfo, CEDRA_COIN, Block } from "@cedra-labs/ts-sdk";
 import { useCallback, useEffect, useState } from "react";
-
+import { useApp } from "@/context/AppProvider";
 interface ValidatorSetData {
   active_validators: Validator[];
   total_voting_power: string;
@@ -34,72 +33,73 @@ function calculateTps(startBlock: Block, endBlock: Block): number {
 }
 
 export default function Stats() {
-    const [ledgerData, setLedgerData] = useState<LedgerInfo>();
-    const [totalSupply, setTotalSupply] = useState<number>();
-    const [totalVotingPower, setTotalVotingPower] = useState<number>();
-    const [activeValidators, setActiveValidators] = useState<number>();
-    const [tps, setTps] = useState<number>();
+    // const { state } = useApp()
+    // const [ledgerData, setLedgerData] = useState<LedgerInfo>();
+    // const [totalSupply, setTotalSupply] = useState<number>();
+    // const [totalVotingPower, setTotalVotingPower] = useState<number>();
+    // const [activeValidators, setActiveValidators] = useState<number>();
+    // const [tps, setTps] = useState<number>();
 
-    const getLedgerInfo = useCallback(async () => {
-        try {
-            const data = await cedraClient.getLedgerInfo();
-            setLedgerData(data)
-        } catch (error) {
-            console.log(`Error in getLedgerInfo: ${error}`)
-        }
-    }, []);
+    // const getLedgerInfo = useCallback(async () => {
+    //     try {
+    //         const data = await cedraClient.getLedgerInfo();
+    //         setLedgerData(data)
+    //     } catch (error) {
+    //         console.log(`Error in getLedgerInfo: ${error}`)
+    //     }
+    // }, []);
 
-    const getCoinTotalSupply = useCallback(async() => {
-        try {
-            const data = await cedraClient.view({
-                payload: {
-                    function: `0x1::coin::supply`,
-                    typeArguments: [CEDRA_COIN]
-                }
-            });
-            const mappedData = data as [{vec: [string]}];
-            const val = mappedData[0]?.vec[0];
-            if(val) {
-                setTotalSupply(Number(val) / Math.pow(10, 8))
-            }
-        } catch (error) {
-            console.log(`Error in getLedgerInfo: ${error}`)
-        }
-    }, [])
+    // const getCoinTotalSupply = useCallback(async() => {
+    //     try {
+    //         const data = await cedraClient.view({
+    //             payload: {
+    //                 function: `0x1::coin::supply`,
+    //                 typeArguments: [CEDRA_COIN]
+    //             }
+    //         });
+    //         const mappedData = data as [{vec: [string]}];
+    //         const val = mappedData[0]?.vec[0];
+    //         if(val) {
+    //             setTotalSupply(Number(val) / Math.pow(10, 8))
+    //         }
+    //     } catch (error) {
+    //         console.log(`Error in getLedgerInfo: ${error}`)
+    //     }
+    // }, [])
 
-    const getTotalVotingPower = useCallback(async() => {
-        try {
-            const data: ValidatorSetData = await cedraClient.getAccountResource({ accountAddress: "0x1", resourceType: "0x1::stake::ValidatorSet" });
-            setActiveValidators(data.active_validators.length);
-            setTotalVotingPower(Number(data.total_voting_power) / Math.pow(10, 8));
-        } catch (error) {
-            console.log(`Error in getTotalVotingPower: ${error}`)
-        }
-    }, []);
+    // const getTotalVotingPower = useCallback(async() => {
+    //     try {
+    //         const data: ValidatorSetData = await cedraClient.getAccountResource({ accountAddress: "0x1", resourceType: "0x1::stake::ValidatorSet" });
+    //         setActiveValidators(data.active_validators.length);
+    //         setTotalVotingPower(Number(data.total_voting_power) / Math.pow(10, 8));
+    //     } catch (error) {
+    //         console.log(`Error in getTotalVotingPower: ${error}`)
+    //     }
+    // }, []);
 
-    const getTps = useCallback(async() => {
-        try {
-            if(!ledgerData) return;
-            const startBlock = await cedraClient.getBlockByHeight({ blockHeight: parseInt(ledgerData.block_height) - TPS_FREQUENCY })
-            const endBlock = await cedraClient.getBlockByHeight({ blockHeight: parseInt(ledgerData.block_height) });
-            setTps(calculateTps(startBlock, endBlock));
-        } catch (error) {
-            console.log(`Error in getTps: ${error}`)
-        }
-    }, [ledgerData])
+    // const getTps = useCallback(async() => {
+    //     try {
+    //         if(!ledgerData) return;
+    //         const startBlock = await cedraClient.getBlockByHeight({ blockHeight: parseInt(ledgerData.block_height) - TPS_FREQUENCY })
+    //         const endBlock = await cedraClient.getBlockByHeight({ blockHeight: parseInt(ledgerData.block_height) });
+    //         setTps(calculateTps(startBlock, endBlock));
+    //     } catch (error) {
+    //         console.log(`Error in getTps: ${error}`)
+    //     }
+    // }, [ledgerData])
     
-    useEffect(() => {
-        getLedgerInfo()
-        getCoinTotalSupply()
-        getTotalVotingPower()
-    }, [getLedgerInfo, getCoinTotalSupply, getTotalVotingPower])
+    // useEffect(() => {
+    //     getLedgerInfo()
+    //     getCoinTotalSupply()
+    //     getTotalVotingPower()
+    // }, [getLedgerInfo, getCoinTotalSupply, getTotalVotingPower])
 
-    useEffect(()=>{
-        getTps()
-    },[getTps])
+    // useEffect(()=>{
+    //     getTps()
+    // },[getTps])
     return (
         <>
-            <div className="relative z-10 grid grid-cols-4 items-center justify-between max-w-6xl mx-auto mt-10 gap-6">
+            {/* <div className="relative z-10 grid grid-cols-4 items-center justify-between max-w-6xl mx-auto mt-10 gap-6">
                 <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-white/10 hover:bg-white/8 transition-all duration-300">
                     <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-b-xl border-b-3 border-[#005664]">
                         <P16 className="font-medium">Total Transactions</P16>
@@ -216,7 +216,7 @@ export default function Stats() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     )
 }

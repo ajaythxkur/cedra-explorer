@@ -1,221 +1,108 @@
 "use client"
 import { H2, P14 } from "@/components/typography";
-import { Table, TableBody,  TableCell, TableRow } from "@/components/ui/table";
+import { Table, TableHead } from "@/components/ui/table";
 import { shortAddress } from "@/lib/utils";
-import { Block, TransactionResponse, TransactionResponseType } from "@cedra-labs/ts-sdk";
-import { useState, useEffect, useCallback } from "react"
-import { IoSwapHorizontal } from "react-icons/io5";
-import { LuBox } from "react-icons/lu";
+import { TransactionResponse, TransactionResponseType } from "@cedra-labs/ts-sdk";
 import Stats from "./Stats";
 import { Search } from "@/components/Search";
 import Link from "next/link";
-import { cedraClient } from "@/lib/cedraClient";
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import TransactionLoading from "@/components/skeletons/homeSkeletons";
-import BlocksLoading from "@/components/skeletons/homeSkeletons";
 import { RxDoubleArrowRight } from "react-icons/rx";
+import { useApp } from "@/context/AppProvider";
+import { useQuery } from "@tanstack/react-query";
+import { TransactionColumn, TransactionHeaderCell, TransactionRow, TransactionsTable } from "@/components/Transactions/TransactionsTable";
+import { BlocksColumn, BlocksTable } from "@/components/Blocks/BlocksTable";
+import { getRecentBlocks } from "@/components/Blocks/utils";
 dayjs.extend(relativeTime);
 
+const TRANSACTION_COLUMNS: TransactionColumn[] = [
+    "versionStatus",
+    "timestamp",
+    "sender",
+    "receiverOrCounterParty",
+    "amountGas"
+]
+
+const BLOCKS_COLUMNS: BlocksColumn[] = [
+    "block_height",
+    "block_timestamp",
+    "first_version",
+    "last_version",
+    "txn_count"
+]
+
+const RECENT_BLOCKS_COUNT = 5;
 export function Home() {
     const router = useRouter()
-    const [latestTransactions, setLatestTransactions] = useState<TransactionResponse[]>();
-    const [latestBlocks, setLatestBlocks] = useState<Block[]>();
-    const [blocksLoading, setBlocksLoading] = useState(false)
-    const [txLoading, setTxLoading] = useState(false)
+    const { state, ledgerData } = useApp()
 
-    const getLatestBlocks = useCallback(async () => {
-        try {
-            setBlocksLoading(true)
-            const ledgerData = await cedraClient.getLedgerInfo();
-            const endBlock = parseInt(ledgerData.block_height);
-            const startBlock = endBlock - 4;
-            const data: Block[] = [];
-            for (let i = startBlock; i <= endBlock; i++) {
-                const block = await cedraClient.getBlockByHeight({ blockHeight: i });
-                data.push(block)
-            };
-            setLatestBlocks(data.reverse());
-        } catch (error) {
-            console.log(`Error in getLatestBlocks: ${error}`)
-        } finally {
-            setBlocksLoading(false)
-        }
-    }, [])
+    const { data: latestTransactions } = useQuery({
+        queryKey: ["latestTransactions", state.client.config.network],
+        queryFn: () => state.client.getTransactions({
+            options: {
+                limit: 5
+            }
+        })
+    })
 
-    const getLatestTransactions = useCallback(async () => {
-        try {
-            setTxLoading(true)
-            const data = await cedraClient.getTransactions({
-                options: {
-                    limit: 5
-                }
-            });
-            setLatestTransactions(data);
-        } catch (error) {
-            console.log(`Error in getLatestTransactions: ${error}`)
-        } finally {
-            setTxLoading(false)
-        }
-    }, [])
-    // useEffect(() => {
-    //     getLatestBlocks()
-    //     getLatestTransactions()
-    // }, [getLatestBlocks, getLatestTransactions])
-    useEffect(() => {
-        const fetchData = async () => {
-            await Promise.all([
-                getLatestBlocks(),
-                getLatestTransactions(),
-            ]);
-        };
-
-        fetchData();
-    }, [getLatestBlocks, getLatestTransactions]);
-
-
-    console.log(latestBlocks)
+    const {data: latestBlocks} = useQuery({
+        queryKey: ["latestBlocks", ledgerData.block_height, state.client.config.network],
+        queryFn: async () => {
+            return getRecentBlocks(parseInt(ledgerData.block_height), RECENT_BLOCKS_COUNT, state.client);
+        },
+    });
     return (
         <>
-            {/* <div className="min-h-screen w-full relative bg-black pt-30"> */}
             <div className="min-h-screen w-full relative pt-10">
-                {/* Search */}
                 <Search />
-
-                {/* Stats */}
                 <Stats />
 
                 <div className="py-10 grid grid-cols-2 gap-6 px-4 relative z-10 max-w-7xl mx-auto">
-                    {/* Transactions */}
-                    {
-                        latestTransactions &&
-                        (
-                            <div className="rounded-2xl p-2 bg-[#111111] overflow-hidden">
-                                <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-xl border-b-3 border-[#005664]">
-                                    <H2>Latest Transactions</H2>
-                                </div>
-                                <Table className="overflow-hidden mt-4">
-                                    {
-                                        txLoading ?
-                                            <TransactionLoading />
-                                            :
-                                            latestTransactions
-                                                ?
-                                                <TableBody>
-                                                    {
-                                                        latestTransactions.map(txn => {
-                                                            return (
-                                                                <TableRow
-                                                                    key={txn.hash}
-                                                                    className="px-4 border-white/10 text-white/50"
-                                                                    onClick={() => router.push(`/tx/${txn.hash}`)}
-                                                                >
-                                                                    <TableCell>
-                                                                        <div className="flex items-center gap-2">
-                                                                            <div className="rounded-full bg-white/20 p-2">
-                                                                                <IoSwapHorizontal size={20} />
-                                                                            </div>
-                                                                            <div className="space-y-2">
-                                                                                <Link href={`/tx/${txn.hash}`}><P14>{shortAddress(txn.hash)}</P14></Link>
-                                                                                <P14><TxnTime txn={txn} /></P14>
-                                                                            </div>
-                                                                        </div>
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        <TxnPath txn={txn} />
-                                                                    </TableCell>
-                                                                    <TableCell className="text-right">
-                                                                        <div className="space-y-2">
-                                                                            <P14 className="font-medium">Amount</P14>
-                                                                            <P14 className="font-medium text-white"><TxnAmount txn={txn} /></P14>
-                                                                        </div>
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                            )
-                                                        })
-                                                    }
-                                                </TableBody>
-                                                :
-                                                <TableBody>
-                                                    <TableRow className="px-4 border-white/10 text-white/50">
-                                                        <TableCell>
-                                                            <div className="space-y-3">
-                                                                <P14>No Transactions</P14>
-                                                            </div>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </TableBody>
+                    <div className="rounded-2xl p-2 bg-[#111111] overflow-hidden">
+                        <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-xl border-b-3 border-[#005664]">
+                            <H2>Latest Transactions</H2>
+                        </div>
+                        {/* <Table className="overflow-hidden mt-4">
+                            {
+                                TRANSACTION_COLUMNS.map((column, i) => (
+                                    <TableHead key={`${i}-${column}`}><P14><TransactionHeaderCell column={column} /></P14></TableHead>
+                                ))
+                            }
+                            {
+                                !latestTransactions 
+                                ?
+                                <TransactionLoading />
+                                :
+                                latestTransactions.map((transaction, i) => (
+                                    <TransactionRow transaction={transaction} columns={TRANSACTION_COLUMNS}/>
+                                ))
+                            }
 
-                                    }
-
-                                </Table>
-                                <div className="w-full text-center py-4 pb-2">
-                                    <Link href="/transactions"><Button className="mx-auto">View More <RxDoubleArrowRight size={16}/>
-</Button></Link>
-                                </div>
-                            </div>
-                        )
-                    }
+                        </Table> */}
+                        {
+                            latestTransactions && <TransactionsTable transactions={latestTransactions} columns={TRANSACTION_COLUMNS}/>
+                        }
+                        <div className="w-full text-center py-4 pb-2">
+                            <Link href="/transactions">
+                                <Button className="mx-auto">View All Transactions <RxDoubleArrowRight size={16} /></Button>
+                            </Link>
+                        </div>
+                    </div>
 
                     {/* Blocks */}
                     <div className="rounded-2xl p-2 bg-[#111111] overflow-hidden">
                         <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-xl border-b-3 border-[#005664]">
                             <H2>Latest Blocks</H2>
                         </div>
-                        <Table className="overflow-hidden mt-4">
-                            {
-                                blocksLoading ?
-                                    <BlocksLoading />
-                                    :
-                                    latestBlocks ?
-                                        <TableBody>
-                                            {
-                                                latestBlocks.map(block => {
-                                                    return (
-                                                        <TableRow key={block.block_height} className="px-4 border-white/10 text-white/50">
-                                                            <TableCell>
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="rounded-full bg-white/20 p-2">
-                                                                        <LuBox size={20} />
-                                                                    </div>
-                                                                    <div className="space-y-2">
-                                                                        <P14>#{block.block_height}</P14>
-                                                                        <P14>{dayjs.unix(Math.floor(Number(block.block_timestamp) / 1_000_000)).fromNow()}</P14>
-                                                                    </div>
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <div className="space-y-3">
-                                                                    <P14>{parseInt(block.last_version) - parseInt(block.first_version) + 1} Txns.</P14>
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell className="text-right">
-                                                                <div className="space-y-2">
-                                                                    <P14 className="font-medium">Block Hash</P14>
-                                                                    <P14 className="font-medium text-white">{shortAddress(block.block_hash)}</P14>
-                                                                </div>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )
-                                                })
-                                            }
-                                        </TableBody>
-                                        :
-                                        <TableBody>
-                                            <TableRow className="px-4 border-white/10 text-white/50">
-                                                <TableCell>
-                                                    <div className="space-y-3">
-                                                        <P14>No Blocks Yet</P14>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                            }
-                        </Table>
+                        {
+                            latestBlocks && <BlocksTable columns={BLOCKS_COLUMNS} blocks={latestBlocks} />
+                        }
                         <div className="w-full text-center py-4 pb-2">
-                            <Link href="/blocks"><Button className="mx-auto">View More <RxDoubleArrowRight size={16}/></Button></Link>
+                            <Link href="/blocks"><Button className="mx-auto">View More <RxDoubleArrowRight size={16} /></Button></Link>
                         </div>
                     </div>
                 </div>

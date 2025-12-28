@@ -1,10 +1,10 @@
 import { Cedra, CedraConfig, NetworkToNetworkName } from "@cedra-labs/ts-sdk"
-import { NETWORK } from "./env"
-function getCedraClient() {
+
+export function getCedraClient(networkName: string) {
     const cedraConfig = new CedraConfig({
-        network: NetworkToNetworkName[NETWORK]
+        network: NetworkToNetworkName[networkName]
     });
     return new Cedra(cedraConfig)
 }
 
-export const cedraClient = getCedraClient()
+export const cedraClient = getCedraClient("testnet")
