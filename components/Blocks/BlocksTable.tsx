@@ -133,6 +133,7 @@ export function BlocksTable({ blocks, columns = DEFAULT_COLUMNS }: BlocksTablePr
                     {
                         columns.map((column, i) => (
                             <TableHead key={`${i}-${column}`}>
+                                {/* <P14 className={`${i === columns.length -1 ? 'text-end' : ''}`}> */}
                                 <P14>
                                     <BlockHeaderCell column={column} />
                                 </P14>

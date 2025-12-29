@@ -1,4 +1,10 @@
+'use client'
 import { TransactionResponseType } from "@cedra-labs/ts-sdk";
+import { FaRegStopCircle } from "react-icons/fa";
+import { IoFlagOutline, IoSwapHorizontalOutline } from "react-icons/io5";
+import { LuArrowRightFromLine, LuBox } from "react-icons/lu";
+import { MdOutlineCheckCircleOutline, MdQuestionMark } from "react-icons/md";
+import { PiClockClockwiseFill } from "react-icons/pi";
 
 type TransactionTypeProps = {
     type: string;
@@ -13,20 +19,20 @@ export function TableTransactionType({ type }: TransactionTypeProps) {
 function getTypeIcon(type: string) {
   switch (type) {
     case TransactionResponseType.BlockMetadata:
-      return "type ico";
+      return <LuBox />;
     case TransactionResponseType.Genesis:
-      return "ico";
+      return <LuArrowRightFromLine />
     case TransactionResponseType.User:
-      return "ico";
+      return <IoSwapHorizontalOutline />
     case TransactionResponseType.Pending:
-      return "ico";
+      return <PiClockClockwiseFill />
     case TransactionResponseType.StateCheckpoint:
-      return "ico";
+      return <IoFlagOutline />;
     case TransactionResponseType.Validator:
-      return "ico";
+      return <MdOutlineCheckCircleOutline />
     case TransactionResponseType.BlockEpilogue:
-      return "ico";
+      return <FaRegStopCircle />;
     default:
-      return"ico";
+      return <MdQuestionMark />
   }
 }

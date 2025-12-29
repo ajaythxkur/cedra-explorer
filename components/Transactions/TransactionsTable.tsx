@@ -3,13 +3,13 @@
 import { TransactionResponse, TransactionResponseType } from "@cedra-labs/ts-sdk";
 import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-// import { TableTransactionType } from "./TransactionType";
-import { CiCircleCheck } from "react-icons/ci";
+import { TableTransactionType } from "./TransactionType";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { shortAddress } from "@/lib/utils";
 import { getTransactionCounterparty } from "./utils";
 import { P14 } from "../typography";
+import { IoIosCheckmarkCircleOutline, IoIosCloseCircleOutline } from "react-icons/io";
 dayjs.extend(relativeTime);
 
 type TransactionCellProps = {
@@ -24,14 +24,15 @@ function SequenceNumberCell({ transaction }: TransactionCellProps) {
 
 function TransactionVersionStatusCell({ transaction }: TransactionCellProps) {
     return (
-        <TableCell className="flex gap-1">
+        <TableCell className="flex gap-1 items-center">
             <Link href={`/txn/${"version" in transaction ? transaction.version : transaction.hash}`}>
                 {"version" in transaction && transaction.version}
             </Link>
             {
-                "success" in transaction && (
-                    <CiCircleCheck /> // TODO: Give red/green color
-                )
+                "success" in transaction ? (
+                    <IoIosCheckmarkCircleOutline className="text-green-500" />
+                ) :
+                    <IoIosCloseCircleOutline className="text-red-500" />
             }
         </TableCell>
     )
@@ -40,9 +41,9 @@ function TransactionVersionStatusCell({ transaction }: TransactionCellProps) {
 function TransactionTypeCell({ transaction }: TransactionCellProps) {
     return (
         <TableCell>
-            {/* <TableTransactionType type={transaction.type} /> */} 
-             {/* TODO: icons for transaction types */}
-            {transaction.type}
+            <TableTransactionType type={transaction.type} />
+            {/* TODO: icons for transaction types */}
+            {/* <P12>{transaction.type}</P12> */}
         </TableCell>
     )
 }
@@ -94,8 +95,8 @@ function TransactionReceiverOrCounterPartyCell({ transaction }: TransactionCellP
                         </span>
                     </>
                 )
-                :
-                "-"
+                    :
+                    "-"
             }
         </TableCell>
     )
@@ -111,8 +112,8 @@ function TransactionFunctionCell({ transaction }: TransactionCellProps) {
 
 function TransactionAmountGasCell({ transaction }: TransactionCellProps) {
     return (
-        <TableCell>
-            - 
+        <TableCell className="text-end">
+            -
         </TableCell>
     )
 }
@@ -141,32 +142,32 @@ const DEFAULT_COLUMNS: TransactionColumn[] = [
 ]
 
 type TransactionHeaderCellProps = {
-  column: TransactionColumn;
+    column: TransactionColumn;
 };
 
-export function TransactionHeaderCell({column}: TransactionHeaderCellProps) {
-  switch (column) {
-    case "sequenceNum":
-      return "#";
-    case "versionStatus":
-      return "Version";
-    case "type":
-      return (
-        "Type" // TODO: tooltip for type
-      );
-    case "timestamp":
-      return "Timestamp";
-    case "sender":
-      return "From";
-    case "receiverOrCounterParty":
-      return "To";
-    case "function":
-      return "Function";
-    case "amountGas":
-      return "Amount";
-    default:
-        throw new Error("Unexpected object: " + column);
-  }
+export function TransactionHeaderCell({ column }: TransactionHeaderCellProps) {
+    switch (column) {
+        case "sequenceNum":
+            return "#";
+        case "versionStatus":
+            return "Version";
+        case "type":
+            return (
+                "Type" // TODO: tooltip for type
+            );
+        case "timestamp":
+            return "Timestamp";
+        case "sender":
+            return "From";
+        case "receiverOrCounterParty":
+            return "To";
+        case "function":
+            return "Function";
+        case "amountGas":
+            return "Amount";
+        default:
+            throw new Error("Unexpected object: " + column);
+    }
 }
 
 type TransactionRowProps = {
@@ -201,8 +202,8 @@ export function TransactionsTable({
                     {
                         columns.map((column, i) => (
                             <TableHead key={`${i}-${column}`}>
-                                <P14>
-                                    <TransactionHeaderCell column={column}/>
+                                <P14 className={`${(i === columns.length -1) ? 'text-end' : 'text-start'}`}>
+                                    <TransactionHeaderCell column={column} />
                                 </P14>
                             </TableHead>
                         ))
