@@ -10,7 +10,6 @@ import { shortAddress } from "@/lib/utils";
 import { getTransactionCounterparty } from "./utils";
 import { P14 } from "../typography";
 import { IoIosCheckmarkCircleOutline, IoIosCloseCircleOutline } from "react-icons/io";
-import { TransactionLoading } from "../skeletons/homeSkeletons";
 import TypesModal from "../TypesModal";
 dayjs.extend(relativeTime);
 
@@ -44,8 +43,6 @@ function TransactionTypeCell({ transaction }: TransactionCellProps) {
     return (
         <TableCell>
             <TableTransactionType type={transaction.type} />
-            {/* TODO: icons for transaction types */}
-            {/* <P12>{transaction.type}</P12> */}
         </TableCell>
     )
 }
@@ -155,7 +152,7 @@ export function TransactionHeaderCell({ column }: TransactionHeaderCellProps) {
             return "Version";
         case "type":
             return (
-                "Type" // TODO: tooltip for type
+                "Type"
             );
         case "timestamp":
             return "Timestamp";
