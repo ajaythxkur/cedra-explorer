@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cedra Explorer
+
+Cedra Explorer is a community-focused blockchain explorer built for the Cedra network. While every blockchain has an explorer, many prioritize functionality over usability. Cedra Explorer takes a **UX-first approach**, delivering a clean, modern, and intuitive interface that makes exploring on-chain data simple and visually appealing for everyone.
+
+The explorer provides transparent access to the Cedra blockchain by transforming complex on-chain data into an easy-to-understand experience. It helps users track transactions, explore blocks in real time, and monitor key network statistics, while also serving as a reliable tool for developers building on Cedra.
+
+---
+
+## Features
+
+* 🔍 Search and track transactions
+* 📦 Explore blocks in real time
+* 📊 View key network and explorer statistics
+* ⚡ Fast and responsive UI
+* 🎨 Clean, modern, community-friendly design
+* 🧑‍💻 Developer-ready and reliable on-chain data
+
+---
+
+## Tech Stack
+
+**Frontend**
+
+* Next.js
+* Modern UI/UX-focused design
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+Make sure you have the following installed:
+
+* Node.js (v18 or higher recommended)
+* npm or yarn
+* Git
+
+---
+
+## Running the Project Locally
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ajaythxkur/cedra-explorer.git
+cd cedra-explorer
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+(Adjust variables based on your backend or network setup.)
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be available at:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Building for Production
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Forking & Upgrading the Project
 
-## Deploy on Vercel
+We welcome community contributions and improvements.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### How to Fork
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Click the **Fork** button on the top-right of this repository
+2. Clone your forked repository:
+
+   ```bash
+   git clone https://github.com/ajaythxkur/cedra-explorer.git
+   ```
+3. Create a new branch for your changes:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+### Making Upgrades
+
+* Improve UI/UX components
+* Add new explorer features (accounts, validators, contracts, etc.)
+* Optimize performance or backend indexing
+* Enhance developer tooling or analytics
+
+After making changes:
+
+```bash
+git commit -m "Add: your feature description"
+git push origin feature/your-feature-name
+```
+
+Then open a **Pull Request** to the main repository.
+
+---
+
+## Vision
+
+Cedra Explorer aims to be more than just infrastructure. It is designed as a welcoming gateway into the Cedra blockchain — transparent, easy to use, and built for the community. By prioritizing clarity, speed, and design, it helps users trust, understand, and engage with the Cedra ecosystem.
+
+---
