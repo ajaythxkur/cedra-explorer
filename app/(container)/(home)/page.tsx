@@ -53,7 +53,7 @@ export default function HomePage() {
     return (
         <>
             <Stats />
-            <div className="py-10 grid grid-cols-2 gap-6 px-4 relative z-10 max-w-7xl mx-auto">
+            <div className=" mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 px-4 relative z-10 max-w-7xl mx-auto">
                 <div className="rounded-2xl p-2 bg-card shadow overflow-hidden relative pb-9.5">
                     <div className="p-3 rounded-xl border-b-2 border-secondary/50 w-fit">
                         <H2>Latest Transactions</H2>

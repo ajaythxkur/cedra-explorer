@@ -17,7 +17,7 @@ export default function TypesModal() {
         <Dialog>
             <DialogTrigger><IoInformationCircleOutline size={16} />
             </DialogTrigger>
-            <DialogContent showCloseButton={false} className="rounded-xl">
+            <DialogContent showCloseButton={false} className="rounded-xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader className="hidden">
                     <DialogTitle>{''}</DialogTitle>
                 </DialogHeader>

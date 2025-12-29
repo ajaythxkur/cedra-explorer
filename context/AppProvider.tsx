@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { getCedraClient } from "@/lib/getCedraClient";
 import { useQuery } from "@tanstack/react-query";
 import { P16 } from "@/components/typography";
+import { Spinner } from "@/components/ui/spinner";
 
 type GlobalState = {
     client: Cedra;
@@ -35,10 +36,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         })
     };
 
-    if(!ledgerData) {
+    if (!ledgerData) {
         return (
             <div className="fixed inset-0 flex flex-col gap-4 items-center justify-center">
-                <div className="loader"></div>
+                <Spinner className="h-10 w-10 text-primary" />
                 <P16>Loading...</P16>
             </div>
 

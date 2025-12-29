@@ -26,7 +26,7 @@ export default function TransactionsPage() {
         }),
     })
     return (
-        <div className="max-w-7xl mx-auto mt-8">
+        <div className="max-w-7xl mx-auto mt-6 md:mt-8 px-4">
             <H2 className="text-primary lg:text-2xl">Latest Transactions</H2>
             <div className="rounded-2xl p-2 bg-card shadow overflow-hidden mt-6">
                 {
@@ -36,7 +36,7 @@ export default function TransactionsPage() {
                         transactions && <TransactionsTable transactions={transactions} />
                 }
             </div>
-            <div className="mt-8 w-full mx-auto flex items-center justify-center gap-10 pb-6">
+            <div className="mt-8 w-full mx-auto flex items-center justify-center gap-10">
                 <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(p => p - 1)}><HiOutlineArrowLeft size={14} /> Previous</Button>
                 <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)}>Next <HiOutlineArrowRight size={14} /></Button>
             </div>

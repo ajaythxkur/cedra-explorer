@@ -22,7 +22,7 @@ export default function BlocksPage() {
         },
     });
     return (
-        <div className="max-w-7xl mx-auto mt-8">
+        <div className="max-w-7xl mx-auto mt-6 md:mt-8 px-4">
             <H2 className="text-primary lg:text-2xl">Latest Blocks</H2>
             <div className="rounded-2xl p-2 bg-card overflow-hidden mt-6">
                 {

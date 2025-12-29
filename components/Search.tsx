@@ -126,12 +126,12 @@ export function Search() {
         fetchData()
     }, [fetchData])
     return (
-        <div className="max-w-xl mx-auto relative z-20">
-            <h1 className="text-4xl font-bold text-center relative z-10 text-primary"><span className="text-foreground">Cedra</span> Explorer</h1>
-            <InputGroup className="p-5 mt-6 rounded-full bg-white">
+        <div className="max-w-xl mx-auto relative z-20 px-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-center relative z-10 text-primary"><span className="text-foreground">Cedra</span> Explorer</h1>
+            <InputGroup className="p-5 mt-4 md:mt-6 rounded-full bg-white">
                 <InputGroupInput
                     placeholder="Search by Version/ Hash/ Block"
-                    className="text-lg ps-0"
+                    className="text-sm md:text-lg ps-0 font-medium"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
@@ -141,7 +141,7 @@ export function Search() {
             </InputGroup>
             {
                 mode === "loading" && (
-                    <div className="rounded-xl bg-background border absolute top-30 w-full overflow-hidden max-h-100 overflow-y-auto">
+                    <div className="rounded-xl bg-background border absolute top-25 md:top-30 left-0 md:left-none w-full overflow-hidden max-h-100 overflow-y-auto">
                         <div className="p-4 border-b text-center">
                             <Spinner className="mx-auto" />
                             <P14 className="text-center mt-4">Getting results...</P14>
@@ -151,7 +151,7 @@ export function Search() {
             }
             {
                 searchResults.length > 0 && mode === "results" && (
-                    <div className="rounded-xl bg-card dark:bg-background shadow border absolute top-30 w-full overflow-hidden max-h-100 overflow-y-auto">
+                    <div className="rounded-xl bg-card dark:bg-background shadow border absolute top-25 md:top-30 left-0 md:left-none w-full overflow-hidden max-h-100 overflow-y-auto">
                         {
                             searchResults.map((res, i) => (
                                 <React.Fragment key={`${i}-searchResult`}>
