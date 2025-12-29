@@ -2,7 +2,10 @@
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { useEffect, useState } from "react"
+import { Network } from "@cedra-labs/ts-sdk"
+import { useApp } from "@/context/AppProvider"
 export function Header() {
+    const { state, updateNetwork } = useApp()
     const [isSticky, setIsSticky] = useState(false)
     const navItems = [
         { title: "Home", url: "/" },
@@ -31,6 +34,10 @@ export function Header() {
                         })
                     }
                 </nav>
+                {/* Match this */}
+                Network: {state.client.config.network} 
+                <Button onClick={() => updateNetwork(Network.TESTNET)}>{Network.TESTNET}</Button>
+                <Button onClick={() => updateNetwork(Network.DEVNET)}>{Network.DEVNET}</Button>
                 <Button variant="outline">Connect Wallet</Button>
             </div>
         </header>

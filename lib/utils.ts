@@ -18,3 +18,4 @@ export function is32ByteHex(text: string) {
 export function isNumeric(text: string) {
   return /^-?\d+$/.test(text);
 }
+
