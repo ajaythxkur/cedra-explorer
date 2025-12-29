@@ -12,7 +12,7 @@ type TransactionTypeProps = {
 
 export function TableTransactionType({ type }: TransactionTypeProps) {
     return (
-        `${getTypeIcon(type)}`
+        getTypeIcon(type)
     )
 }
 
