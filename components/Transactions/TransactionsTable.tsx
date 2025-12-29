@@ -11,6 +11,7 @@ import { getTransactionCounterparty } from "./utils";
 import { P14 } from "../typography";
 import { IoIosCheckmarkCircleOutline, IoIosCloseCircleOutline } from "react-icons/io";
 import { TransactionLoading } from "../skeletons/homeSkeletons";
+import TypesModal from "../TypesModal";
 dayjs.extend(relativeTime);
 
 type TransactionCellProps = {
@@ -203,9 +204,15 @@ export function TransactionsTable({
                     {
                         columns.map((column, i) => (
                             <TableHead key={`${i}-${column}`}>
-                                <P14 className={`${(i === columns.length - 1) ? 'text-end' : 'text-start'}`}>
-                                    <TransactionHeaderCell column={column} />
-                                </P14>
+                                <div className={`flex items-center gap-1 ${(i === columns.length - 1) ? 'justify-end' : 'text-start'}`}>
+                                    <P14 >
+                                        <TransactionHeaderCell column={column} />
+                                    </P14>
+                                    {
+                                        column === 'type' &&
+                                        <TypesModal />
+                                    }
+                                </div>
                             </TableHead>
                         ))
                     }

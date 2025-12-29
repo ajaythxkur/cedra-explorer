@@ -6,6 +6,8 @@ import { Network } from "@cedra-labs/ts-sdk"
 import { useApp } from "@/context/AppProvider"
 import { usePathname } from "next/navigation"
 import { ThemeToggle } from "./ThemeToggle"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { MdKeyboardArrowDown } from "react-icons/md"
 export function Header() {
     const pathname = usePathname()
     const { state, updateNetwork } = useApp()
@@ -31,20 +33,32 @@ export function Header() {
                 <nav className="flex items-center gap-6">
                     {
                         navItems.map((item, i) => {
-                            const isActive = pathname.startsWith(item.url)
+                            const isActive = pathname === item.url
                             return (
                                 <Link key={i} href={`${item.url}`} className={`hover:text-primary ${isActive ? 'text-primary font-medium' : ''}`}>{item.title}</Link>
                             )
                         })
                     }
                 </nav>
-                <div className="flex items-center gap-2 text-end">
-                    <ThemeToggle/>
+                <div className="flex items-center gap-3 text-end">
+                    <ThemeToggle />
                     {/* Match this */}
                     {/* Network: {state.client.config.network}
                     <Button onClick={() => updateNetwork(Network.TESTNET)}>{Network.TESTNET}</Button>
                     <Button onClick={() => updateNetwork(Network.DEVNET)}>{Network.DEVNET}</Button> */}
-                    <Button>Connect Wallet</Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="capitalize ">
+                            <Button variant="outline">
+                                {state.client.config.network}
+                                <MdKeyboardArrowDown />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem className="capitalize cursor-pointer" onClick={() => updateNetwork(Network.TESTNET)}>{Network.TESTNET}</DropdownMenuItem>
+                            <DropdownMenuItem className="capitalize cursor-pointer" onClick={() => updateNetwork(Network.DEVNET)}>{Network.DEVNET}</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button disabled>Connect Wallet</Button>
                 </div>
             </div>
         </header>
