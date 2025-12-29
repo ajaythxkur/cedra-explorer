@@ -4,6 +4,7 @@ import { useContext, createContext, useState, useCallback, useEffect } from "rea
 import { useSearchParams } from "next/navigation";
 import { getCedraClient } from "@/lib/getCedraClient";
 import { useQuery } from "@tanstack/react-query";
+import { P16 } from "@/components/typography";
 
 type GlobalState = {
     client: Cedra;
@@ -35,7 +36,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     };
 
     if(!ledgerData) {
-        return "Loading..."
+        return (
+            <div className="fixed inset-0 flex flex-col gap-4 items-center justify-center">
+                <div className="loader"></div>
+                <P16>Loading...</P16>
+            </div>
+
+        )
     };
 
     return (

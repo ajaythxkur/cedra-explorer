@@ -10,6 +10,7 @@ import { shortAddress } from "@/lib/utils";
 import { getTransactionCounterparty } from "./utils";
 import { P14 } from "../typography";
 import { IoIosCheckmarkCircleOutline, IoIosCloseCircleOutline } from "react-icons/io";
+import { TransactionLoading } from "../skeletons/homeSkeletons";
 dayjs.extend(relativeTime);
 
 type TransactionCellProps = {
@@ -25,7 +26,7 @@ function SequenceNumberCell({ transaction }: TransactionCellProps) {
 function TransactionVersionStatusCell({ transaction }: TransactionCellProps) {
     return (
         <TableCell className="flex gap-1 items-center">
-            <Link href={`/txn/${"version" in transaction ? transaction.version : transaction.hash}`}>
+            <Link href={`/txn/${"version" in transaction ? transaction.version : transaction.hash}`} className="text-secondary hover:underline transition-all duration-300">
                 {"version" in transaction && transaction.version}
             </Link>
             {
@@ -193,16 +194,16 @@ type TransactionsTableProps = {
 
 export function TransactionsTable({
     transactions,
-    columns = DEFAULT_COLUMNS
+    columns = DEFAULT_COLUMNS,
 }: TransactionsTableProps) {
     return (
         <Table className="overflow-hidden">
-            <TableHeader className="border-b border-white/10">
+            <TableHeader className="border-b border-gray/8">
                 <TableRow>
                     {
                         columns.map((column, i) => (
                             <TableHead key={`${i}-${column}`}>
-                                <P14 className={`${(i === columns.length -1) ? 'text-end' : 'text-start'}`}>
+                                <P14 className={`${(i === columns.length - 1) ? 'text-end' : 'text-start'}`}>
                                     <TransactionHeaderCell column={column} />
                                 </P14>
                             </TableHead>

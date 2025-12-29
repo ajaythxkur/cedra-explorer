@@ -8,6 +8,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { P14 } from "../typography";
 import Link from "next/link";
 import { useState } from "react";
+import CopyAddress from "../CopyAddress";
 dayjs.extend(relativeTime);
 
 type BlockCellProps = {
@@ -16,8 +17,10 @@ type BlockCellProps = {
 function BlockHash({ block }: BlockCellProps) {
     const [isFullAddress, setIsFullAddress] = useState(false)
     return (
-        <TableCell onClick={() => setIsFullAddress(!isFullAddress)}>
-            {isFullAddress ? block.block_hash : shortAddress(block.block_hash)}
+        <TableCell onClick={() => setIsFullAddress(!isFullAddress)} className="flex items-center gap-1">
+            {/* {isFullAddress ? block.block_hash : shortAddress(block.block_hash)} */}
+            {shortAddress(block.block_hash)}
+            <CopyAddress address={block.block_hash} className="text-gray/40" />
         </TableCell>
     )
 }
@@ -25,7 +28,7 @@ function BlockHash({ block }: BlockCellProps) {
 function BlockHeight({ block }: BlockCellProps) {
     return (
         <TableCell>
-            <Link href={"/block/" + block.block_height}>{block.block_height}</Link>
+            <Link href={"/block/" + block.block_height} className="text-secondary hover:underline">{block.block_height}</Link>
         </TableCell>
     )
 }
@@ -41,7 +44,7 @@ function BlockTimestamp({ block }: BlockCellProps) {
 function FirstVersion({ block }: BlockCellProps) {
     return (
         <TableCell>
-            <Link href={"/txn/" + block.first_version}>{block.first_version}</Link>
+            <Link href={"/txn/" + block.first_version} className="text-secondary hover:underline">{block.first_version}</Link>
         </TableCell>
     )
 }
@@ -49,14 +52,14 @@ function FirstVersion({ block }: BlockCellProps) {
 function LastVersion({ block }: BlockCellProps) {
     return (
         <TableCell>
-            <Link href={"/txn/" + block.last_version}>{block.last_version}</Link>
+            <Link href={"/txn/" + block.last_version} className="text-secondary hover:underline">{block.last_version}</Link>
         </TableCell>
     )
 }
 
 function TxnCount({ block }: BlockCellProps) {
     return (
-        <TableCell>
+        <TableCell className="text-end">
             {parseInt(block.last_version) - parseInt(block.first_version) + 1}
         </TableCell>
     )
@@ -76,9 +79,9 @@ const DEFAULT_COLUMNS: BlocksColumn[] = [
     "block_height",
     "block_timestamp",
     "block_hash",
-    "txn_count",
     "first_version",
     "last_version",
+    "txn_count",
 ]
 
 type BlockRowProps = {
@@ -133,8 +136,7 @@ export function BlocksTable({ blocks, columns = DEFAULT_COLUMNS }: BlocksTablePr
                     {
                         columns.map((column, i) => (
                             <TableHead key={`${i}-${column}`}>
-                                {/* <P14 className={`${i === columns.length -1 ? 'text-end' : ''}`}> */}
-                                <P14>
+                                <P14 className={`${i === columns.length - 1 ? 'text-end' : ''}`}>
                                     <BlockHeaderCell column={column} />
                                 </P14>
                             </TableHead>

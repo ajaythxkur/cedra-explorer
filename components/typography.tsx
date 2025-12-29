@@ -26,15 +26,15 @@ const Typography = forwardRef<TypographyElement, TypographyProps>(
         /**(16px = 1rem)*/
         const variants: Record<TypographyTag, string> = {
             h1: "text-[1.75rem] leading-[1.75rem] font-manrope",          // 28px
-            h2: "text-[1rem] md:text-[1.25rem] leading-[1.25rem] font-manrope font-medium",          // 24px
+            h2: "text-[1rem] md:text-[1.25rem] leading-[1.25rem] font-manrope font-semibold text-gray/80",          // 24px
 
             button16: "text-[1rem] leading-[1rem] font-manrope",  // 16px
             button14: "text-sm leading-[14px] font-manrope",  // 14px
 
             p: "text-[1rem] leading-[1rem] font-manrope",  // 16px
-            p16: "text-[1rem] leading-[1rem] font-manrope",  // 16px
-            p14: "text-sm leading-[14px] font-manrope",  // 14px
-            p12: "text-xs leading-[12px] font-manrope",  // 12px
+            p16: "text-[1rem] leading-[1rem] font-manrope font-medium",  // 16px
+            p14: "text-sm leading-[14px] font-manrope font-medium",  // 14px
+            p12: "text-xs leading-[12px] font-manrope font-medium",  // 12px
         }
 
         return (

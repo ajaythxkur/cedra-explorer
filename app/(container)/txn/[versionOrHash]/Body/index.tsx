@@ -8,6 +8,7 @@ import { useApp } from "@/context/AppProvider";
 import dayjs from "dayjs";
 import { getTransactionCounterparty } from "@/components/Transactions/utils";
 import { isNumeric } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Body({ versionOrHash }: { versionOrHash: string }) {
     const { state } = useApp();
@@ -21,16 +22,24 @@ export default function Body({ versionOrHash }: { versionOrHash: string }) {
             }
         }
     })
-    if (!transaction) return "Loading...";
+    if (!transaction) {
+        return (
+            <div className="py-10">
+                <Spinner className="mx-auto h-8 w-8" />
+                <P14 className="text-center mt-4">Loading...</P14>
+            </div>
+        )
+    };
     const counterParty = getTransactionCounterparty(transaction);
     return (
         <div className="max-w-7xl mx-auto mt-6">
-            <div className="flex items center gap-4">
+
+            <div className="flex items center gap-1 bg-gray/5 w-fit p-1 rounded-md">
                 <Button>Overview</Button>
-                <Button disabled>Raw</Button>
-                <Button disabled>Internal Txns</Button>
+                <Button disabled variant="ghost">Raw</Button>
+                <Button disabled variant="ghost">Internal Txns</Button>
             </div>
-            <div className="bg-[#1a2022] p-4 rounded-xl mt-4 text-white/70 space-y-6">
+            <div className="bg-card p-4 rounded-xl mt-4 space-y-6 shadow">
                 <div className="grid grid-cols-4 items-center">
                     <P14 className="col-span-1">Transaction Hash:</P14>
                     <div className="col-span-3 flex items-center gap-2">
@@ -40,12 +49,12 @@ export default function Body({ versionOrHash }: { versionOrHash: string }) {
                         </Badge>
                     </div>
                 </div>
-                 {
+                {
                     "version" in transaction && (
                         <div className="grid grid-cols-4 items-center">
                             <P14 className="col-span-1">Version:</P14>
                             <div className="col-span-3">
-                                 <P14>{parseInt(transaction.version)}</P14>
+                                <P14 className="text-secondary">{parseInt(transaction.version)}</P14>
                             </div>
                         </div>
                     )
@@ -72,7 +81,7 @@ export default function Body({ versionOrHash }: { versionOrHash: string }) {
                 }
             </div>
 
-            <div className="bg-[#1a2022] p-4 rounded-xl mt-4 text-white/70 space-y-6">
+            <div className="bg-card p-4 rounded-xl mt-4 space-y-6">
                 {
                     "sender" in transaction && (
                         <div className="grid grid-cols-4 items-center">

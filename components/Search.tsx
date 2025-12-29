@@ -7,6 +7,7 @@ import { HiOutlineInbox } from "react-icons/hi"
 import { is32ByteHex, isNumeric } from "@/lib/utils"
 import { useApp } from "@/context/AppProvider"
 import Link from "next/link"
+import { Spinner } from "./ui/spinner"
 type SearchResult = {
     label: string;
     to: string | null;
@@ -84,7 +85,7 @@ export function Search() {
 
     const fetchData = useCallback(async () => {
         try {
-            if(debSearch === "") throw new Error("Nothing to search")
+            if (debSearch === "") throw new Error("Nothing to search")
             setMode("loading")
             const isBlockHeightOrVersion = isNumeric(debSearch);
             const is32Hex = is32ByteHex(debSearch);
@@ -126,46 +127,47 @@ export function Search() {
     }, [fetchData])
     return (
         <div className="max-w-xl mx-auto relative z-20">
-            <h1 className="text-4xl font-bold text-white text-center relative z-10">Cedra Explorer</h1>
-            <InputGroup className="border border-white/20 p-5 mt-6 rounded-full">
+            <h1 className="text-4xl font-bold text-center relative z-10 text-primary"><span className="text-foreground">Cedra</span> Explorer</h1>
+            <InputGroup className="p-5 mt-6 rounded-full bg-white">
                 <InputGroupInput
                     placeholder="Search by Version/ Hash/ Block"
-                    className="text-lg ps-0 text-white"
+                    className="text-lg ps-0"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
                 <InputGroupAddon className="px-0">
-                    <SearchIcon />
+                    <SearchIcon className="text-primary"/>
                 </InputGroupAddon>
             </InputGroup>
             {
                 mode === "loading" && (
-                    <div className="rounded-xl bg-[#1a2022] absolute top-30 w-full border border-white/20 text-white overflow-hidden max-h-100 overflow-y-auto">
-                        <div className="flex items-center gap-4 p-4 border-b hover:bg-white/10 border-b-white/10">
-                            <P14>Loading...</P14>
+                    <div className="rounded-xl bg-background border absolute top-30 w-full overflow-hidden max-h-100 overflow-y-auto">
+                        <div className="p-4 border-b text-center">
+                            <Spinner className="mx-auto" />
+                            <P14 className="text-center mt-4">Getting results...</P14>
                         </div>
                     </div>
                 )
             }
             {
-                searchResults.length > 0 && mode === "results" &&  (
-                    <div className="rounded-xl bg-[#1a2022] absolute top-30 w-full border border-white/20 text-white overflow-hidden max-h-100 overflow-y-auto">
+                searchResults.length > 0 && mode === "results" && (
+                    <div className="rounded-xl bg-card dark:bg-background shadow border absolute top-30 w-full overflow-hidden max-h-100 overflow-y-auto">
                         {
                             searchResults.map((res, i) => (
                                 <React.Fragment key={`${i}-searchResult`}>
                                     {
                                         res.to ? (
-                                            <div className="flex items-center gap-4 p-4 border-b hover:bg-white/10 border-b-white/10">
-                                                <Link href={res.to} onClick={() => {
-                                                    setSearch("")
-                                                }}><P14>{res.label}</P14></Link>
-                                            </div>
+                                            <Link href={res.to} onClick={() => { setSearch("") }}>
+                                                <div className="flex items-center gap-4 p-4 border-b hover:bg-accent/10 border-b-primary/20 transition-all duration-200">
+                                                    <P14>{res.label}</P14>
+                                                </div>
+                                            </Link>
                                         )
                                             :
                                             (
-                                                <div className="py-4 text-center space-y-3 text-white/50">
+                                                <div className="py-4 text-center space-y-3 text-gray/50">
                                                     <HiOutlineInbox size={32} className="mx-auto" />
-                                                    <P14>No Results.</P14>
+                                                    <P14>No Results Found.</P14>
                                                 </div>
                                             )
                                     }
@@ -175,7 +177,6 @@ export function Search() {
                     </div>
                 )
             }
-
         </div >
     )
 }

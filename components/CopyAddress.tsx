@@ -6,8 +6,9 @@ import { useCopyToClipboard } from "usehooks-ts";
 import { P14 } from "./typography";
 type CopyProps = {
     address: string
+    className?:string
 }
-export default function CopyAddress({ address }: CopyProps) {
+export default function CopyAddress({ address, className }: CopyProps) {
     const [copiedText, copy] = useCopyToClipboard()
     const [copied, setCopied] = useState(false)
     function handleCopy(text: string) {
@@ -29,7 +30,7 @@ export default function CopyAddress({ address }: CopyProps) {
             {/* <P14 className="font-medium">Copy Address</P14> */}
             {
                 !copied ?
-                    <BsCopy size={16} className="h-3.5 w-3.5 cursor-pointer text-white/20"/>
+                    <BsCopy size={16} className={`h-3.5 w-3.5 cursor-pointer text-secondary ${className}`}/>
                     :
                     <IoCheckmarkDone className="text-green-600" />
             }

@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { ReactQueryClientProvider } from "@/provider/QueryProvider";
 import { Suspense } from "react";
 import { AppProvider } from "@/context/AppProvider";
+import { Providers } from "@/provider/ThemeProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -70,19 +71,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${satoshi.className} antialiased`} style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6, 182, 212, 0.25), transparent 70%), #000000", }} >
-          <Suspense>
-        <ReactQueryClientProvider>
-            <AppProvider>
-              <Header />
-              <main>
-                {children}
-              </main>
-              <Footer />
-            </AppProvider>
-        </ReactQueryClientProvider>
-          </Suspense>
+    <html lang="en" suppressHydrationWarning>
+      {/* <body className={`${satoshi.className} antialiased`} style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(6, 182, 212, 0.25), transparent 70%), #000000", }} > */}
+      <body className={`${satoshi.className} antialiased`} >
+        <Suspense>
+          <ReactQueryClientProvider>
+            <Providers>
+              <AppProvider>
+                <Header />
+                <main>
+                  {children}
+                </main>
+                <Footer />
+              </AppProvider>
+            </Providers>
+          </ReactQueryClientProvider>
+        </Suspense>
       </body>
     </html>
   );

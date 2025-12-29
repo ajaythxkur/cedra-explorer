@@ -25,52 +25,39 @@ export default function Stats() {
     return (
         <>
             <div className="relative z-10 grid grid-cols-4 items-center justify-between max-w-6xl mx-auto mt-10 gap-6">
-                <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-white/10 hover:bg-white/8 transition-all duration-300">
-                    <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-b-xl border-b-3 border-[#005664]">
+                <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-card hover:bg-white/8 transition-all duration-300">
+                    <div className="p-3 rounded-b-xl text-center border-b border-secondary/40">
                         <P16 className="font-medium">Total Transactions</P16>
                     </div>
-                    <div className="px-1 py-1">
-                        <div className="space-y-1 py-4 pb-1 text-white/80">
-                            <H2 className="text-center font-bold">{parseInt(ledgerData.ledger_version).toLocaleString("en-US")}</H2>
-                            <P14 className="text-center text-sx"></P14>
-                        </div>
+                    <div className="px-1 py-4">
+                        <H2 className="text-center font-bold">{parseInt(ledgerData.ledger_version).toLocaleString("en-US")}</H2>
                     </div>
                 </div>
 
-
-
-                <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-white/10 hover:bg-white/8 transition-all duration-300">
-                    <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-b-xl border-b-3 border-[#005664]">
+                <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-card hover:bg-white/8 transition-all duration-300">
+                    <div className="p-3 rounded-b-xl text-center border-b border-secondary/40">
                         <P16 className="font-medium">Total Supply</P16>
                     </div>
-                    <div className="px-1 py-1">
-                        <div className="space-y-1 py-4 pb-1 text-white/80">
-                            <H2 className="text-2xl text-center font-bold">{totalSupply ? totalSupply.toLocaleString("en-US") : "-"}</H2>
-                            <P14 className="text-center text-sx"></P14>
-                        </div>
+                    <div className="px-1 py-4">
+                        <H2 className="text-center font-bold">{totalSupply ? totalSupply.toLocaleString("en-US") : "-"}</H2>
                     </div>
                 </div>
 
-                <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-white/10 hover:bg-white/8 transition-all duration-300">
-                    <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-b-xl border-b-3 border-[#005664]">
+                <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-card hover:bg-white/8 transition-all duration-300">
+                    <div className="p-3 rounded-b-xl text-center border-b border-secondary/40">
                         <P16 className="font-medium">Total Cedra Staked</P16>
                     </div>
-                    <div className="px-1 py-1">
-                        <div className="space-y-1 py-4 pb-1 text-white/80">
-                            <H2 className="text-2xl text-center font-bold">{cedraValidatorData ? (parseInt(cedraValidatorData.total_voting_power) / Math.pow(10, 8)).toLocaleString("en-US") : "-"}</H2>
-                            <P14 className="text-center text-sx"></P14>
-                        </div>
+                    <div className="px-1 py-4">
+                        <H2 className="text-center font-bold">{cedraValidatorData ? (parseInt(cedraValidatorData.total_voting_power) / Math.pow(10, 8)).toLocaleString("en-US") : "-"}</H2>
                     </div>
                 </div>
-                <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-white/10 hover:bg-white/8 transition-all duration-300">
-                    <div className="bg-[#00444f] text-white backgrop-blur-xl p-3 rounded-b-xl border-b-3 border-[#005664]">
+                
+                <div className="rounded-xl overflow-hidden backdrop-blur-lg bg-card hover:bg-white/8 transition-all duration-300">
+                    <div className="p-3 rounded-b-xl text-center border-b border-secondary/40">
                         <P16 className="font-medium">Active Validators</P16>
                     </div>
-                    <div className="px-1 py-1">
-                        <div className="space-y-1 py-4 pb-1 text-white/80">
-                            <H2 className="text-2xl text-center font-bold">{cedraValidatorData ? cedraValidatorData.active_validators.length.toLocaleString("en-US") : "-"}</H2>
-                            <P14 className="text-center text-sx"></P14>
-                        </div>
+                    <div className="px-1 py-4">
+                        <H2 className="text-center font-bold">{cedraValidatorData ? cedraValidatorData.active_validators.length.toLocaleString("en-US") : "-"}</H2>
                     </div>
                 </div>
             </div>
