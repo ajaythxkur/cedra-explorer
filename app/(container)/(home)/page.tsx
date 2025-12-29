@@ -16,6 +16,7 @@ dayjs.extend(relativeTime);
 
 const TRANSACTION_COLUMNS: TransactionColumn[] = [
     "versionStatus",
+    "type",
     "timestamp",
     "sender",
     "receiverOrCounterParty",

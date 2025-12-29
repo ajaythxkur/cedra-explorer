@@ -36,8 +36,8 @@ export default function Body({ versionOrHash }: { versionOrHash: string }) {
 
             <div className="flex items center gap-1 bg-gray/5 w-fit p-1 rounded-md">
                 <Button>Overview</Button>
-                <Button disabled variant="ghost">Raw</Button>
-                <Button disabled variant="ghost">Internal Txns</Button>
+                {/* <Button disabled variant="ghost">Raw</Button>
+                <Button disabled variant="ghost">Internal Txns</Button> */}
             </div>
             <div className="bg-card p-4 rounded-xl mt-4 space-y-6 shadow">
                 <div className="grid grid-cols-4 items-center">

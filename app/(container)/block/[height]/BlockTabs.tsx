@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { isBlockMetadataTransactionResponse, TransactionResponse } from "@cedra-labs/ts-sdk";
 import React from "react";
 import { Spinner } from "@/components/ui/spinner";
+import Link from "next/link";
 
 interface BlockTabsProps {
     blockHeight: number;
@@ -47,7 +48,8 @@ export default function BlockTabs({ blockHeight }: BlockTabsProps) {
                     <div className="grid grid-cols-4 items-center">
                         <P14 className="col-span-1">Transactions ({parseInt(block.last_version) - parseInt(block.first_version) + 1}):</P14>
                         <div className="col-span-3">
-                            <P14 className="text-accent">{block.first_version} - {block.last_version}</P14>
+                            <P14 className="text-primary">
+                                <Link href={"/txn/" + block.first_version} className="text-secondary hover:underline transition-all duration-300">{block.first_version}</Link> - <Link href={"/txn/" + block.last_version} className="text-secondary hover:underline transition-all duration-300">{block.last_version}</Link></P14>
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center">
@@ -87,13 +89,13 @@ export default function BlockTabs({ blockHeight }: BlockTabsProps) {
                     <div className="grid grid-cols-4 items-center">
                         <P14 className="col-span-1">Previous Block:</P14>
                         <div className="col-span-3">
-                            <P14>{previousBlock}</P14>
+                            <P14><Link href={"/block/" + previousBlock} className="text-secondary hover:underline transition-all duration-300">{previousBlock}</Link></P14>
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center">
                         <P14 className="col-span-1">Next Block:</P14>
                         <div className="col-span-3">
-                            <P14>{nextBlock}</P14>
+                            <P14><Link href={"/block/" + nextBlock} className="text-secondary hover:underline transition-all duration-300">{nextBlock}</Link></P14>
                         </div>
                     </div>
                 </div>

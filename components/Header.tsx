@@ -29,11 +29,15 @@ export function Header() {
     return (
         <header className={`p-4 sticky top-0 w-full z-90 transition-all duration-300 mx-auto ${isSticky ? "bg-background shadow max-w-full" : "max-w-7xl"}`}>
             <div className="flex items-center justify-between">
-                <h1 className="font-bold text-2xl text-primary">CEDRA</h1>
+                <Link href={"/"}><h1 className="font-bold text-2xl text-primary">CEDRA</h1></Link>
                 <nav className="flex items-center gap-6">
                     {
                         navItems.map((item, i) => {
-                            const isActive = pathname === item.url
+                            const isActive =
+                                item.url === '/'
+                                    ? pathname === '/'
+                                    : pathname === item.url || pathname.startsWith(item.url + '/')
+
                             return (
                                 <Link key={i} href={`${item.url}`} className={`hover:text-primary ${isActive ? 'text-primary font-medium' : ''}`}>{item.title}</Link>
                             )
@@ -42,10 +46,6 @@ export function Header() {
                 </nav>
                 <div className="flex items-center gap-3 text-end">
                     <ThemeToggle />
-                    {/* Match this */}
-                    {/* Network: {state.client.config.network}
-                    <Button onClick={() => updateNetwork(Network.TESTNET)}>{Network.TESTNET}</Button>
-                    <Button onClick={() => updateNetwork(Network.DEVNET)}>{Network.DEVNET}</Button> */}
                     <DropdownMenu>
                         <DropdownMenuTrigger className="capitalize ">
                             <Button variant="outline">

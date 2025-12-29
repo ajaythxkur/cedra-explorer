@@ -15,9 +15,8 @@ const TRANSACTION_LIMIT = 20;
 export default function TransactionsPage() {
     const { state } = useApp()
     const [page, setPage] = useState(1);
-    const offset = (page - 1) * TRANSACTION_LIMIT;
 
-    const { data: transactions, isLoading: txnLoading, error: error } = useQuery({
+    const { data: transactions, isLoading: txnLoading } = useQuery({
         queryKey: [`transactions`, state.client.config.network, page],
         queryFn: () => state.client.getTransactions({
             options: {

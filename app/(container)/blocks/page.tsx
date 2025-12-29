@@ -15,9 +15,7 @@ const BLOCK_COUNT = 30;
 
 export default function BlocksPage() {
     const { state, ledgerData } = useApp();
-    const [page, setPage] = useState(1);
-    const offset = (page - 1) * BLOCK_COUNT;
-    const { data: blocks, isLoading: blocksLoading, error } = useQuery({
+    const { data: blocks, isLoading: blocksLoading } = useQuery({
         queryKey: ["blocks", ledgerData.block_height, state.client.config.network],
         queryFn: async () => {
             return getRecentBlocks(parseInt(ledgerData.block_height), BLOCK_COUNT, state.client);
@@ -33,10 +31,6 @@ export default function BlocksPage() {
                         :
                         blocks && <BlocksTable blocks={blocks} />
                 }
-            </div>
-            <div className="mt-8 w-full mx-auto flex items-center justify-center gap-10 pb-6">
-                <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(p => p - 1)}><HiOutlineArrowLeft size={14} /> Previous</Button>
-                <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)}>Next <HiOutlineArrowRight size={14} /></Button>
             </div>
         </div>
 
